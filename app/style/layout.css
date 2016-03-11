@@ -1,0 +1,64 @@
+html {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-image: url(/img/bg1.jpg);
+}
+
+body {
+    font-family:"微软雅黑";
+    font-size: large;
+}
+
+#app {
+    margin-top: 1em;
+}
+
+.pure-menu-heading {
+    text-align: center;
+    border-bottom: 2px solid #47b8e0;
+}
+
+.pure-menu-link {
+    width: 84%;
+    overflow: hidden;
+}
+
+.pure-menu-item {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+
+.pure-menu-item:hover {
+    background-color: #ffda8e;
+    color: white;
+}
+
+z`::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(50, 50, 50, .3);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, .8);
+}
+
+.custom-restricted-width {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: inline-block;
+    background-color: rgba(255,255,255, .60);
+    -webkit-box-shadow: 0px 2px 10px 0px #666;
+    border-radius: 0.5em;
+    width: 18em;
+    white-space: nowrap;
+}
+
+#BMList {
+    display: block;
+    -webkit-column-width: 18em;
+    width: 75%;
+    margin: auto;
+}

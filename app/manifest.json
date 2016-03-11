@@ -1,0 +1,32 @@
+{
+    "name": "BMStart - 2.0 ver.",
+    "version": "0.2.0",
+    "description": "Modfied by Deardrops(github.com/deardrops)",
+    "icons": {
+        "16": "icon-16.png",
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
+    "permissions": [
+        "bookmarks",
+        "history",
+        "chrome://favicon/",
+        "topSites",
+        "management",
+        "tabs",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "chrome_url_overrides": {
+        "newtab": "main.html"
+    },
+    "background": {
+        "page": "background.html"
+    },
+    "minimum_chrome_version": "19.0",
+    "default_locale": "en",
+    "manifest_version": 2,
+    "web_accessible_resources": [
+        "main.html"
+    ]
+}

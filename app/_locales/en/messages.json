@@ -1,0 +1,59 @@
+{
+	"extName":{
+		"message":"BMStart"
+	},
+	"description":{
+		"message":"Use your BookMarks as your new tab page."
+	},
+	"version":{
+		"message":"0.0.3.1"
+	},
+	"author":{
+		"message":"dingbao.ai[a.k.a ehaagwlke]"
+	},
+	"title":{
+		"message":"Use bookmarks as your new tab page"
+	},
+    "defaultFolderName":{
+        "message":"Folder"
+    },
+    "mostVisited":{
+        "message":"Most Visited:"
+    },
+    "apps":{
+        "message":"APPs"
+    },
+    "BMStart":{
+        "message":"BMStart"
+    },
+    "unnamedFolder":{
+        "message":"Unnamed Folder"
+    },
+    "noBMData":{
+    	"message":"You did NOT bookmark even a single web page yet."
+    },
+    "BMSecTitle":{
+    	"message":"BMStart"
+    },
+    "APPSecTitle":{
+    	"message":"Apps"
+    },
+    "rclsdButtonTitle":{
+    	"message":"Recently Closed"
+    },
+    "webStore":{
+        "message":"Chrome Web Store"
+    },
+    "deleteBMIConfirm":{
+        "message":"You will delete the BookMark forever.\nAre you sure?"
+    },
+    "delBMIToolTip":{
+        "message":"Delete this bookmark item"
+    },
+    "deleteTopSiteConfirm":{
+        "message":"Remove this link from MostVisited?\nWill never show again."
+    },
+    "rclsdTitleStr":{
+        "message":"Recently Closed"
+    }
+}
