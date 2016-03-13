@@ -1,7 +1,7 @@
 {
-    "name": "BMStart - 2.0 ver.",
+    "name": "BMStart - Better New Tab For You",
     "version": "0.2.0",
-    "description": "Modfied by Deardrops(github.com/deardrops)",
+    "description": "BMStart (stand for BookmarkStart) can replace your default NEW TAB by bookmarks view. See more: https://github.com/Deardrops/BMStart2",
     "icons": {
         "16": "icon-16.png",
         "48": "icon-48.png",

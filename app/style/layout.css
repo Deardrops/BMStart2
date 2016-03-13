@@ -9,6 +9,15 @@ body {
     font-size: large;
 }
 
+z`::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(50, 50, 50, .3);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, .8);
+}
+
 #app {
     margin-top: 1em;
 }
@@ -34,15 +43,6 @@ body {
 .pure-menu-item:hover {
     background-color: #ffda8e;
     color: white;
-}
-
-z`::-webkit-scrollbar {
-    width: 6px;
-    background: rgba(50, 50, 50, .3);
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(128, 128, 128, .8);
 }
 
 .custom-restricted-width {
