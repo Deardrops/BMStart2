@@ -14,20 +14,23 @@
         <div id="BMList">
             <template v-for="Folder in FolderList | filterBy voidFilter ">
                 <div fid="{{Folder.id}}" class="pure-menu custom-restricted-width" @dragover.prevent @drag="drag" @drop="drop">
-                    <a href="#" class="pure-menu-heading" @click="toggle">
-                        {{Folder.title}}
-                        </a>
+                    <a class="pure-menu-heading">{{Folder.title}}</a>
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item" id="{{Bookmark.id}}" pid="{{Bookmark.parentId}}" v-for="Bookmark in Folder.children | filterBy urlFilter ">
                             <a href="{{Bookmark.url}}" class="pure-menu-link">
-                            <span>
+                                <span>
                                 <img src="chrome://favicon/{{Bookmark.url}}">
-                            </span>
-                            {{ Bookmark.title }}</a>
+                            </span> {{ Bookmark.title }}</a>
                         </li>
                     </ul>
                 </div>
             </template>
+        </div>
+        <div id="MostVisted"></div>
+        <div id="History"></div>
+        <div id="RecycleBin"></div>
+        <div id="SearchBar">
+            <!-- <input type="text" v-model="KeyWord" placeholder="type to search"> -->
         </div>
     </div>
     <script type="text/javascript" src="js/vue.min.js"></script>

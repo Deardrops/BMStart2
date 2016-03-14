@@ -1,120 +1,138 @@
-var App = new Vue({
-    el: '#app',
-    init: updateView,
-    data: {
-        FolderList: [],
-        Bookmarks: [],
-        Draged: {}
-    },
-    computed: {},
-    methods: {
-        voidFilter: function(item) {
-            var bookmarks = item.children;
-            for (var i in bookmarks) {
-                if (bookmarks[i].url) {
-                    if (bookmarks[i].url.indexOf('javascript:') !== 0) {
+(function(window) {
+    'use strict';
+    var ChromeBM = window.chrome.bookmarks,
+        //Vue.js实例对象
+        App = new window.Vue({
+        el: '#app',
+        init: updateView,
+        data: {
+            FolderList: [],
+            Bookmarks: [],
+            Draged: {},
+            KeyWord:{}
+        },
+        computed: {},
+        methods: {
+            //过滤空文件夹
+            voidFilter: function(item) {
+                var bookmarks = item.children,
+                    i;
+
+                for (i in bookmarks) {
+                    if (bookmarks[i].url) {
+
+                        if (bookmarks[i].url.indexOf('javascript:') !== 0) {
+                            return item;
+                        }
+                    }
+                }
+            },
+            //过滤文件夹和js脚本
+            urlFilter: function(item) {
+                if (!item.children) {
+
+                    if (item.url.indexOf('javascript:') !== 0) {
                         return item;
                     }
                 }
-            }
-        },
-        urlFilter: function(item) {
-            if (!item.children) {
-                if (item.url.indexOf('javascript:') !== 0) {
-                    return item;
-                }
-            }
-        },
-        drag: function(event) {
-            var oldElement = event.srcElement.parentElement;
-            var id = oldElement.id;
-            var pid = oldElement.getAttribute('pid');
-            var app = this;
-            allocate(this.FolderList, id, pid, function(FolderList, FolderIdx, BookmarkIdx) {
-                app.Draged = FolderList[FolderIdx].children.splice(BookmarkIdx, 1)[0];
-            });
-        },
-        drop: function(event) {
-            var Destination = event.srcElement.parentElement;
-            var id = Destination.id;
-            var pid = Destination.getAttribute('pid');
-            var old = this.Draged;
-            old.parentId = pid;
-            allocate(this.FolderList, id, pid, function(FolderList, FolderIdx, BookmarkIdx) {
-                FolderList[FolderIdx].children.splice(BookmarkIdx, 0, old);
-                moveBookmark(old.id, pid, BookmarkIdx);
-            });
-        },
-        toggle:function(event){
-        	var show = event.target.parentElement.children[1].style.display;
-        	if (show == "none"){
-        		event.target.parentElement.children[1].style.display = "";
-        	}else{
-        		event.target.parentElement.children[1].style.display = "none";
-        	}
-        }
-    }
-});
+            },
+            drag: function(event) {
+                var oldElement = event.srcElement.parentElement,
+                    id = oldElement.id,
+                    pid = oldElement.getAttribute('pid'),
+                    app = this;
 
-function allocate(FolderList, id, pid, callback) {
-    //在FolderList中搜索书签的辅助函数
-    //输入书签的id，返回书签在FolderList中的索引
-    var li = FolderList;
-    OuterLoop:
-        for (var i in li) {
-            if (li[i].id == pid) {
-                for (var b in li[i].children) {
-                    if (li[i].children[b].id == id) {
-                        callback(li, i, b);
-                        break OuterLoop;
+                allocate(this.FolderList, id, pid, function(List,Idx, BMIdx) {
+                    app.Draged = List[Idx].children.splice(BMIdx, 1)[0];
+                });
+            },
+            drop: function(event) {
+                var Destination = event.srcElement.parentElement,
+                    id = Destination.id,
+                    pid = Destination.getAttribute('pid'),
+                    old = this.Draged;
+
+                old.parentId = pid;
+                allocate(this.FolderList, id, pid, function(List, Idx, BMIdx) {
+                    List[Idx].children.splice(BMIdx, 0, old);
+                    moveBookmark(old.id, pid, BMIdx);
+                });
+            }
+        }
+    });
+
+    // 在FolderList中搜索书签的辅助函数
+    // 输入书签的id，返回书签在FolderList中的索引
+    function allocate(FolderList, id, pid, callback) {
+        var li = FolderList,
+            i,b;
+
+        Loop:
+            for (i in li) {
+
+                if (li[i].id == pid) {
+
+                    for (b in li[i].children) {
+
+                        if (li[i].children[b].id == id) {
+                            callback(li, i, b);
+                            break Loop;
+                        }
                     }
                 }
             }
-        }
-}
-
-function moveBookmark(id, newPid, idx) {
-	//简单粗暴的方法移动书签
-    var Destination = {
-        parentId: newPid,
-        index: parseInt(idx)
-    };
-    chrome.bookmarks.move(id.toString(), Destination);
-}
-
-function updateView() {
-    if (App) {
-        App.FolderList = [];
     }
-    chrome.bookmarks.getTree(function(bookmarks) {
+    //移动书签到指定文件夹
+    function moveBookmark(id, newPid, idx) {
+        var Destination = {
+            parentId: newPid,
+            index: parseInt(idx)
+        };
+
+        ChromeBM.move(id.toString(), Destination);
+    }
+
+    //更新视图
+    function updateView() {
+        if (App) {
+            App.FolderList = [];
+        }
+
         //将书签文件夹树展开为列表，存在FolderList中
-        function treeWalker(BookmarkList) {
+        ChromeBM.getTree(function(bookmarks) {
+
             //搜索书签树，展开为文件夹列表
             //每个文件夹列表的children属性为书签列表
-            var Bookmark = {};
-            for (var i in BookmarkList) {
-                if (!BookmarkList[i].children) {
+            function treeWalker(BookmarkList) {
+                var i;
+
+                for (i in BookmarkList) {
+
                     //不是文件夹
-                    if (BookmarkList[i].url.indexOf('javascript:') !== 0) {
+                    if (!BookmarkList[i].children) {
+
                         //不是js脚本
-                        App.Bookmarks.push(BookmarkList[i]);
+                        if (BookmarkList[i].url.indexOf('javascript:') !== 0) {
+                            App.Bookmarks.push(BookmarkList[i]);
+                        }
+                    } else { //是文件夹，向下递归检索
+                        App.FolderList.push(BookmarkList[i]);
+                        treeWalker(BookmarkList[i].children);
                     }
-                } else {
-                    //是文件夹，向下递归检索
-                    App.FolderList.push(BookmarkList[i]);
-                    treeWalker(BookmarkList[i].children);
                 }
             }
-        }
-        treeWalker(bookmarks);
-    });
-}
 
-chrome.bookmarks.onChildrenReordered.addListener(updateView);
-chrome.bookmarks.onImportEnded.addListener(updateView);
-chrome.bookmarks.onChanged.addListener(updateView);
-chrome.bookmarks.onRemoved.addListener(updateView);
-chrome.bookmarks.onCreated.addListener(updateView);
+            treeWalker(bookmarks);
+        });
+    }
 
-// 不想被闪瞎的话请注释掉下面一行代码
-// chrome.bookmarks.onMoved.addListener(updateView);
+    ChromeBM.onChildrenReordered.addListener(updateView);
+    ChromeBM.onImportEnded.addListener(updateView);
+    ChromeBM.onChanged.addListener(updateView);
+    ChromeBM.onRemoved.addListener(updateView);
+    ChromeBM.onCreated.addListener(updateView);
+
+    // 不想被闪瞎的话请注释掉下面一行代码
+    // ChromeBM.onMoved.addListener(updateView);
+
+})(window);
