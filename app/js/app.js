@@ -3,69 +3,70 @@
     var ChromeBM = window.chrome.bookmarks,
         //Vue.js实例对象
         App = new window.Vue({
-        el: '#app',
-        init: updateView,
-        data: {
-            FolderList: [],
-            Bookmarks: [],
-            Draged: {},
-            KeyWord:{}
-        },
-        computed: {},
-        methods: {
-            //过滤空文件夹
-            voidFilter: function(item) {
-                var bookmarks = item.children,
-                    i;
+            el: '#app',
+            init: initView,
+            data: {
+                FolderList: [],
+                Bookmarks: [],
+                Draged: {},
+                KeyWord: {},
+                RecentAdd: [],
+            },
+            computed: {},
+            methods: {
+                //过滤空文件夹
+                voidFilter: function(item) {
+                    var bookmarks = item.children,
+                        i;
 
-                for (i in bookmarks) {
-                    if (bookmarks[i].url) {
+                    for (i in bookmarks) {
+                        if (bookmarks[i].url) {
 
-                        if (bookmarks[i].url.indexOf('javascript:') !== 0) {
+                            if (bookmarks[i].url.indexOf('javascript:') !== 0) {
+                                return item;
+                            }
+                        }
+                    }
+                },
+                //过滤文件夹和js脚本
+                urlFilter: function(item) {
+                    if (!item.children) {
+
+                        if (item.url.indexOf('javascript:') !== 0) {
                             return item;
                         }
                     }
+                },
+                drag: function(event) {
+                    var oldElement = event.srcElement.parentElement,
+                        id = oldElement.id,
+                        pid = oldElement.getAttribute('pid'),
+                        app = this;
+
+                    allocate(this.FolderList, id, pid, function(List, Idx, BMIdx) {
+                        app.Draged = List[Idx].children.splice(BMIdx, 1)[0];
+                    });
+                },
+                drop: function(event) {
+                    var Destination = event.srcElement.parentElement,
+                        id = Destination.id,
+                        pid = Destination.getAttribute('pid'),
+                        old = this.Draged;
+
+                    old.parentId = pid;
+                    allocate(this.FolderList, id, pid, function(List, Idx, BMIdx) {
+                        List[Idx].children.splice(BMIdx, 0, old);
+                        moveBookmark(old.id, pid, BMIdx);
+                    });
                 }
-            },
-            //过滤文件夹和js脚本
-            urlFilter: function(item) {
-                if (!item.children) {
-
-                    if (item.url.indexOf('javascript:') !== 0) {
-                        return item;
-                    }
-                }
-            },
-            drag: function(event) {
-                var oldElement = event.srcElement.parentElement,
-                    id = oldElement.id,
-                    pid = oldElement.getAttribute('pid'),
-                    app = this;
-
-                allocate(this.FolderList, id, pid, function(List,Idx, BMIdx) {
-                    app.Draged = List[Idx].children.splice(BMIdx, 1)[0];
-                });
-            },
-            drop: function(event) {
-                var Destination = event.srcElement.parentElement,
-                    id = Destination.id,
-                    pid = Destination.getAttribute('pid'),
-                    old = this.Draged;
-
-                old.parentId = pid;
-                allocate(this.FolderList, id, pid, function(List, Idx, BMIdx) {
-                    List[Idx].children.splice(BMIdx, 0, old);
-                    moveBookmark(old.id, pid, BMIdx);
-                });
             }
-        }
-    });
+        });
 
     // 在FolderList中搜索书签的辅助函数
     // 输入书签的id，返回书签在FolderList中的索引
     function allocate(FolderList, id, pid, callback) {
         var li = FolderList,
-            i,b;
+            i, b;
 
         Loop:
             for (i in li) {
@@ -126,6 +127,17 @@
         });
     }
 
+    function getRecentAdd(num = 10) {
+        ChromeBM.getRecent(num, function(bookmarks) {
+            App.RecentAdd = bookmarks;
+        });
+    }
+
+    function initView() {
+        getRecentAdd();
+        updateView();
+    }
+
     ChromeBM.onChildrenReordered.addListener(updateView);
     ChromeBM.onImportEnded.addListener(updateView);
     ChromeBM.onChanged.addListener(updateView);
@@ -136,3 +148,8 @@
     // ChromeBM.onMoved.addListener(updateView);
 
 })(window);
+//TODO
+//最上边：搜索栏，输入以搜索特定书签
+//最右边：最近添加的书签
+//最右边：最近的历史纪录
+//最下边：大大的书签删除框

@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    font-family: "微软雅黑";
+    font-family: "\5FAE\8F6F\96C5\9ED1";
     font-size: large;
 }
 
@@ -38,11 +38,15 @@ z`::-webkit-scrollbar {
 .pure-menu-heading {
     text-align: center;
     border-bottom: 2px solid #47b8e0;
+    margin-right: 1em;
+    margin-left: 1em;
 }
 
 .pure-menu-link {
     width: 84%;
     overflow: hidden;
+    padding: 0.3em 1em 0.3em 1em;
+    margin-right: 0.9em;
 }
 
 .pure-menu-item {
@@ -55,13 +59,18 @@ z`::-webkit-scrollbar {
     color: white;
 }
 
-.custom-restricted-width {
-    margin-top: 1em;
-    margin-bottom: 1em;
+.folder {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
     display: inline-block;
-    background-color: rgba(255, 255, 255, .60);
+    background-color: rgba(236, 240, 241, 0.89);
     -webkit-box-shadow: 0px 2px 10px 0px #666;
-    border-radius: 0.5em;
+    border-radius: 4px;
     width: 18em;
     white-space: nowrap;
+    transition-duration: 0.5s;
+    transition-property: color, background-color;
+}
+.folder:hover {
+    background-color: rgba(236, 240, 241, 1.0);
 }

@@ -12,21 +12,38 @@
 <body>
     <div id="app">
         <div id="BMList">
+            <div id="MostVisted">
+                 <div class="pure-menu folder">
+                    <a class="pure-menu-heading">最近添加</a>
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item" id="{{Bookmark.id}}" pid="{{Bookmark.parentId}}" v-for="Bookmark in RecentAdd | filterBy urlFilter ">
+                            <a href="{{Bookmark.url}}" class="pure-menu-link">
+                                <span>
+                                <img src="chrome://favicon/{{Bookmark.url}}">
+                                </span>
+                                {{ Bookmark.title }}
+                             </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <template v-for="Folder in FolderList | filterBy voidFilter ">
-                <div fid="{{Folder.id}}" class="pure-menu custom-restricted-width" @dragover.prevent @drag="drag" @drop="drop">
+                <div fid="{{Folder.id}}" class="pure-menu folder" @dragover.prevent @drag="drag" @drop="drop">
                     <a class="pure-menu-heading">{{Folder.title}}</a>
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item" id="{{Bookmark.id}}" pid="{{Bookmark.parentId}}" v-for="Bookmark in Folder.children | filterBy urlFilter ">
                             <a href="{{Bookmark.url}}" class="pure-menu-link">
                                 <span>
                                 <img src="chrome://favicon/{{Bookmark.url}}">
-                            </span> {{ Bookmark.title }}</a>
+                                </span>
+                                {{ Bookmark.title }}
+                             </a>
                         </li>
                     </ul>
                 </div>
             </template>
         </div>
-        <div id="MostVisted"></div>
+
         <div id="History"></div>
         <div id="RecycleBin"></div>
         <div id="SearchBar">
